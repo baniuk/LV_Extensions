@@ -1,0 +1,37 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+#include "VersionNo.h"
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VERSION_FILE
+ PRODUCTVERSION VERSION_PRODUCT
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x0L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041504b0"
+        BEGIN
+            VALUE "CompanyName", "ZUT"
+            VALUE "FileDescription", "LV Dll"
+            VALUE "FileVersion", VERSION_FILESTR
+            VALUE "InternalName", "LV_FastMedian.dll"
+            VALUE "LegalCopyright", "Copyright PB (C) 2014"
+            VALUE "OriginalFilename", ""
+            VALUE "ProductName", "LV_Extensions"
+            VALUE "ProductVersion", VERSION_PRODUCTSTR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x415, 1200
+    END
+END

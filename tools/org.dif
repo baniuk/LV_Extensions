@@ -1,0 +1,18 @@
+--- Makefile.win	2013-10-26 22:42:57.956111400 +0200
++++ ..\External_dep\config4cpp\src\Makefile.win	2013-10-26 22:34:51.449284800 +0200
+@@ -29,6 +29,7 @@
+ 		ConfigLex.h \
+ 		SchemaTypeBoolean.h \
+ 		SchemaTypeDummy.h \
++		SchemaTypeDurationMicroseconds.h \
+ 		SchemaTypeDurationMilliseconds.h \
+ 		SchemaTypeDurationSeconds.h \
+ 		SchemaTypeEnum.h \
+@@ -73,6 +74,7 @@
+ 		StringVector.obj \
+ 		SchemaType.obj \
+ 		SchemaTypeBoolean.obj \
++		SchemaTypeDurationMicroseconds.obj \
+ 		SchemaTypeDurationMilliseconds.obj \
+ 		SchemaTypeDurationSeconds.obj \
+ 		SchemaTypeEnum.obj \

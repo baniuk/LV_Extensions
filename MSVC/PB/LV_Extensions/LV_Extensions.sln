@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LV_FastMedian", "LV_FastMedian\LV_FastMedian.vcxproj", "{C1F04888-1317-4A5F-9E3B-DFACF208A901}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MatrixContainers", "MatrixContainers\MatrixContainers.vcxproj", "{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1F04888-1317-4A5F-9E3B-DFACF208A901}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C1F04888-1317-4A5F-9E3B-DFACF208A901}.Debug|Win32.Build.0 = Debug|Win32
+		{C1F04888-1317-4A5F-9E3B-DFACF208A901}.Release|Win32.ActiveCfg = Release|Win32
+		{C1F04888-1317-4A5F-9E3B-DFACF208A901}.Release|Win32.Build.0 = Release|Win32
+		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Debug|Win32.ActiveCfg = Debug|Win32
+		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Debug|Win32.Build.0 = Debug|Win32
+		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Release|Win32.ActiveCfg = Release|Win32
+		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
