@@ -20,5 +20,14 @@ lib\modules
 +---src									Source file of programs (dll) in separate folders
 |   +---
 +---tests								Tests for programs and libs in separate folders
-|   +---
+|   \---
+		+---data						Possible input and output from test
 \---tools								Binary tools
+
+Property sheets: gtest, solution_dependencies (include, lib\modules)
+Dependenciec can be by manual adding libraries or by using options 
+
+todo - clean test
+		clean all project
+		add comments
+			clean cmatrix and cdump (move relevant method to simple static class)

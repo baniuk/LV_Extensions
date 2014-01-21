@@ -18,21 +18,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\lib\src\DumpAll\C_DumpAll.cpp">
+    <ClCompile Include="..\..\..\..\tests\LV_FastMedian\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\lib\src\DumpAll\stdafx.cpp">
+    <ClCompile Include="..\..\..\..\tests\LV_FastMedian\TEST_LV_FastMedian.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\lib\src\DumpAll\stdafx.h">
+    <ClInclude Include="..\..\..\..\tests\LV_FastMedian\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\lib\src\DumpAll\targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\includes\C_DumpAll.h">
+    <ClInclude Include="..\..\..\..\tests\LV_FastMedian\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,14 +7,10 @@
 
 #include "targetver.h"
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-
-#include <windows.h> 
 #include <iostream>
-#include <exception>
 #include <tchar.h>
-#include <math.h>
-#include <crtdbg.h>
-
+#include "gtest/gtest.h"
+#include "C_Matrix_Container.h"
+#include "C_DumpAll.h"
 
 // TODO: reference additional headers your program requires here

@@ -5,7 +5,7 @@
 #define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
 #endif
 
-
+#include <windows.h>
 // Ver 1.3.3 by PB
 
 /// definiuje zmien¹ c_matrix i od razu ³aduje do niej plik fiel
