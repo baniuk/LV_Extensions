@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LV_FastMedian", "LV_FastMed
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MatrixContainers", "MatrixContainers\MatrixContainers.vcxproj", "{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DumpAll", "DumpAll\DumpAll.vcxproj", "{8496C3CC-069F-470D-BE2A-B6159CEA5583}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Debug|Win32.Build.0 = Debug|Win32
 		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Release|Win32.ActiveCfg = Release|Win32
 		{59A5F80C-21F7-4C5E-ABF1-BF61488C2F24}.Release|Win32.Build.0 = Release|Win32
+		{8496C3CC-069F-470D-BE2A-B6159CEA5583}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8496C3CC-069F-470D-BE2A-B6159CEA5583}.Debug|Win32.Build.0 = Debug|Win32
+		{8496C3CC-069F-470D-BE2A-B6159CEA5583}.Release|Win32.ActiveCfg = Release|Win32
+		{8496C3CC-069F-470D-BE2A-B6159CEA5583}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
