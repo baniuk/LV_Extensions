@@ -18,37 +18,34 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\stdafx.h">
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\targetver.h">
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\includes\Pantheios_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\fastMedian.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.rc">
+    <ResourceCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.rc2">
+    <None Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc2">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

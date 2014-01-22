@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C1F04888-1317-4A5F-9E3B-DFACF208A901}</ProjectGuid>
+    <ProjectGuid>{F2A61CFE-A50E-499D-B5BB-981C01523A16}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>LV_FastMedian</RootNamespace>
+    <RootNamespace>LV_Tiff</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -44,9 +44,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)_Debug</TargetName>
-    <IncludePath>$(IncludePath)</IncludePath>
-    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,7 +53,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LV_FASTMEDIAN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LV_TIFF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -64,8 +61,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\tools\verbuild.exe $(SolutionDir)..\..\..\src\LV_FastMedian\VersionNo.h -c
-$(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tools\ $(SolutionDir)..\..\..\src\LV_FastMedian\VersionNo.h</Command>
+      <Command>$(SolutionDir)..\..\..\tools\verbuild.exe $(SolutionDir)..\..\..\src\LV_Tiff\VersionNo.h -c
+$(SolutionDir)..\..\..\src\LV_Tiff\Version.bat $(SolutionDir)..\..\..\tools\ $(SolutionDir)..\..\..\src\LV_Tiff\VersionNo.h</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(SolutionDir)Debug\$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
@@ -78,7 +75,7 @@ $(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tool
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LV_FASTMEDIAN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LV_TIFF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -92,23 +89,22 @@ $(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tool
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\includes\Pantheios_header.h" />
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\fastMedian.h" />
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\stdafx.h" />
-    <ClInclude Include="..\..\..\..\src\LV_FastMedian\targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\dllmain.cpp" />
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.cpp" />
-    <ClCompile Include="..\..\..\..\src\LV_FastMedian\stdafx.cpp">
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\dllmain.cpp" />
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.cpp" />
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.rc" />
+    <ClInclude Include="..\..\..\..\includes\Pantheios_header.h" />
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\stdafx.h" />
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.rc2" />
+    <ResourceCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc2" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

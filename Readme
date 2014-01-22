@@ -31,3 +31,9 @@ todo - clean test
 		clean all project
 		add comments
 			clean cmatrix and cdump (move relevant method to simple static class)
+
+Nowy projekt dll:
+properties: Pantheios, Dll, libdependiences
+Prebuild Link
+Copy resource.h + *.rc + *.rc2 (zmienic nazwy w œrodku) + dodaæ do projektu
+Panth_header do projektu			
