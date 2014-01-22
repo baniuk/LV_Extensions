@@ -44,6 +44,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\..\..\External_dep\libtiff\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\..\External_dep\libtiff\lib;$(LibraryPath)</LibraryPath>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,6 +62,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libtiff.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)..\..\..\tools\verbuild.exe $(SolutionDir)..\..\..\src\LV_Tiff\VersionNo.h -c
@@ -96,7 +100,9 @@ $(SolutionDir)..\..\..\src\LV_Tiff\Version.bat $(SolutionDir)..\..\..\tools\ $(S
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\includes\error_codes.h" />
     <ClInclude Include="..\..\..\..\includes\Pantheios_header.h" />
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\LV_Tiff.h" />
     <ClInclude Include="..\..\..\..\src\LV_Tiff\stdafx.h" />
     <ClInclude Include="..\..\..\..\src\LV_Tiff\targetver.h" />
   </ItemGroup>
@@ -109,4 +115,9 @@ $(SolutionDir)..\..\..\src\LV_Tiff\Version.bat $(SolutionDir)..\..\..\tools\ $(S
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="DayStamp.None.None.Increment" BuildVersion_StartDate="2014/1/23" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

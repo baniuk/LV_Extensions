@@ -14,7 +14,9 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include "LV_Tiff.h"
 #include "Pantheios_header.h"
-
+#include "error_codes.h"
+#include "tiffio.h"
 
 // TODO: reference additional headers your program requires here

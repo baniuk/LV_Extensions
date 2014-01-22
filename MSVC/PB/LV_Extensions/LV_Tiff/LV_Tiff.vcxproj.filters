@@ -38,6 +38,12 @@
     <ClInclude Include="..\..\..\..\includes\Pantheios_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\LV_Tiff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\includes\error_codes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc">
