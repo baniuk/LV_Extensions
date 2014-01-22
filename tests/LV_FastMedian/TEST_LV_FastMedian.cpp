@@ -22,7 +22,6 @@ protected:
 	p_med_filt med_filt; 
 	virtual void SetUp()
 	{
-		BOOL ret;
 		init_error = FALSE;	// no error
 		hinstLib = LoadLibrary(TEXT("../../../../bin/LV_FastMedian_Debug.dll")); 
 		if(hinstLib==NULL)
