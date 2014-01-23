@@ -56,7 +56,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		}
 		else
 		{
-			pantheios_be_file_setFilePath(PSTR(PANTHEIOS_LOG_FILE_NAME), PANTHEIOS_BEID_ALL);
+			pantheios_be_file_setFilePath(PSTR(PANTHEIOS_LOG_FILE_NAME), PANTHEIOS_BE_FILE_F_TRUNCATE, PANTHEIOS_BE_FILE_F_TRUNCATE, PANTHEIOS_BEID_ALL);
 			pantheios::log_INFORMATIONAL("Logger enabled!");
 		}
 	case DLL_THREAD_ATTACH:

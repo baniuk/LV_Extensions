@@ -87,5 +87,7 @@ TEST_F(DLL_Tests,FastMedianTest)
 	
 	SAFE_DELETE(input_image);
 	SAFE_DELETE(output_image);
+
+	cout << "Results in /data/test_out.dat" << endl;
 	EXPECT_EQ(1,1);
 }
