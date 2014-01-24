@@ -1,6 +1,9 @@
 /**
  * \file    LV_FastMedian.cpp
  * \brief	Implementacja szybkiej mediany oparta o poprzedni projekt.
+ * \details Eksportuje nastêpuj¹ce funkcje
+ * - med_filt 
+ * - med_filt_mask 
  * \author  PB
  * \date    2012/09/08
  */

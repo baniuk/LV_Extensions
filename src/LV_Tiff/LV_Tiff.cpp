@@ -1,9 +1,9 @@
 /**
  * \file    LV_Tiff.cpp
- * \brief	Obs³uga tiffa
+ * \brief	Holds Tiff related operations
  * \details Eksportuje nastêpuj¹ce funkcje
- * \li Tiff_GetParams - zwraca rozmiary obrazu
- * \li Tiff_Read - wczytuje obraz
+ * - Tiff_GetParams - zwraca rozmiary obrazu
+ * - Tiff_GetImage - wczytuje obraz
  * \pre libtiff3.dll and other dependencies must be on path
  * \author  PB
  * \date    2014/01/22
@@ -12,16 +12,16 @@
 #include "stdafx.h"
 
 /** 
- * Reads size of the image and return dimmensions to LabView due to memory allocation.
+ * Reads size of the image and return dimmensions to LabView due to memory allocation needs.
  * \param[in] image_name	name and path to the input image
  * \param[out] _nrows	number of rows (height)
  * \param[out] _ncols	number of cols (width)
  * \return operation status
- * \retval following values are returned from function
+ * \retval error_codes
  * \li OK - no error
  * \li NULL_POINTER
  * \li FILE_READ_ERROR
- * \li OTHER_ERROR - nieokreœlony b³¹d
+ * \li OTHER_ERROR
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
@@ -85,11 +85,11 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \param[in] image_name	name and path to the input image
  * \param[out] _data	pointer to memory block that will hold read image
  * \return operation status
- * \retval following values are returned from function
+ * \retval error_codes
  * \li OK - no error
  * \li NULL_POINTER
  * \li FILE_READ_ERROR
- * \li OTHER_ERROR - nieokreœlony b³¹d
+ * \li OTHER_ERROR
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
