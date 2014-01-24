@@ -26,6 +26,7 @@
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
  * \todo Supress warnings on read specified Tiffs - incorrect count for field "DateTime" (25, expecting 20); tag trimmed, see tests
+ * \todo check supported tiffs in every function
 */
 extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UINT16* const _nrows, UINT16* const _ncols)
 {
@@ -88,7 +89,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \retval error_codes
  * \li OK - no error
  * \li NULL_POINTER
- * \li FILE_READ_ERROR
+ * \li FILE_READ_ERROR - also when unsuported tiff format
  * \li OTHER_ERROR
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
@@ -100,9 +101,13 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT16* const _data)
 {
 	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
-	tsize_t sizeOfTiff, stripSize;
+	tsize_t sizeOfTiff;
 	tstrip_t strip;
 	tdata_t buf;
+	UINT16 bitsPerSample;																		// number of bits on pixel
+	UINT16 samplesPerPixel;		// SamplesPerPixel is usually 1 for bilevel, grayscale, and palette-color images. SamplesPerPixel is usually 3 for RGB images.
+	UINT32 tileWidth;
+	int TIFFReturnValue;
 	if(NULL==_data)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
@@ -114,46 +119,61 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	if(NULL==tif)																								// error during opening
 	{
 		PANTHEIOS_TRACE_ERROR(PSTR("Error in opening image: "), image_name);
+		TIFFClose(tif);
 		return FILE_READ_ERROR;
 	}
-	// ---------- Loading tiff ----------
-	buf = _TIFFmalloc(TIFFStripSize(tif));
-	UINT32 index = 0;
-	UINT16* p;
-	p = (UINT16 *)buf;
-	for (strip = 0; strip < TIFFNumberOfStrips(tif); strip++)
+	// check supported tiff format
+	TIFFReturnValue = TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
+	if(TIFFReturnValue!=1)																						// error
 	{
-		sizeOfTiff = TIFFReadEncodedStrip(tif, strip, buf, (tsize_t) -1);
-		if(-1==sizeOfTiff)
-		{
-			PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFReadEncodedStrip"));
-			return OTHER_ERROR;
-		}
-		for(int i = 0; i < sizeOfTiff; i++)
-		{
-			_data[index] = *(p + i);
-			if(i == (sizeOfTiff / 2) - 1) {index++; break;}
-			index++;
-		}
+		PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
+		TIFFClose(tif);
+		return OTHER_ERROR;
 	}
-	PANTHEIOS_TRACE_DEBUG(PSTR("TIFFReadEncodedStrip put "), pantheios::integer(sizeOfTiff),PSTR(" bytes"));
-	
-// 	UINT16 tt;
-// 	UINT32 licz=0;
-// 	BYTE* p;
-// 	BYTE up,down;
-// 	p = (BYTE*)(buf);
-// 	for(UINT32 i=0;i<stripSize*TIFFNumberOfStrips(tif);i+=2)
-// 	{
-// 		tt = 0;
-// 		up = *(p+i);
-// 		down = *(p+i+1);
-// 		tt = up;
-// 		tt = (tt<<8) | down;
-// 		_data[licz++] = tt;
-// 	}
-	_TIFFfree(buf);
-
+	TIFFReturnValue = TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
+	if(TIFFReturnValue!=1)																						// error
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
+		TIFFClose(tif);
+		return OTHER_ERROR;
+	}
+	// test conditions: notiles, 16bit, 1sample per pixel	
+	if(	TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tileWidth)==NULL &&		// no tiles
+		16==bitsPerSample &&											// 16 bit image
+		1==samplesPerPixel)												// 1 sample per pixel
+	{
+		// ---------- Loading tiff (example from doc) ----------
+		// Image is loaded into internally allocated memory and then coiped to user memory
+		buf = _TIFFmalloc(TIFFStripSize(tif));
+		UINT32 index = 0;
+		UINT16* p;
+		p = (UINT16 *)buf;
+		for (strip = 0; strip < TIFFNumberOfStrips(tif); strip++)
+		{
+			sizeOfTiff = TIFFReadEncodedStrip(tif, strip, buf, (tsize_t) -1);
+			if(-1==sizeOfTiff)
+			{
+				PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFReadEncodedStrip"));
+				TIFFClose(tif);
+				_TIFFfree(buf);
+				return OTHER_ERROR;
+			}
+			for(int i = 0; i < sizeOfTiff; i++)
+			{
+				_data[index] = *(p + i);
+				if(i == (sizeOfTiff / 2) - 1) {index++; break;}
+				index++;
+			}
+		}
+		PANTHEIOS_TRACE_DEBUG(PSTR("TIFFReadEncodedStrip put "), pantheios::integer(sizeOfTiff),PSTR(" bytes"));
+		_TIFFfree(buf);
+	}
+	else
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Unsuported Tiff"));
+		TIFFClose(tif);
+		return FILE_READ_ERROR;
+	}
 	TIFFClose(tif);
 	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
 	return OK;

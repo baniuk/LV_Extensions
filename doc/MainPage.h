@@ -9,6 +9,6 @@
 * -# ::Tiff_GetImage
 * \subsection lv_fastmedian LV_FastMedian Library
 * \copybrief LV_FastMedian.cpp
-* -# ::med_filt
-* -# ::med_filt_mask
+* -# ::LV_MedFilt31 (depreciated)
+* -# ::LV_MedFilt
 */ 

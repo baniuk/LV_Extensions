@@ -3,7 +3,7 @@
  * \brief	Implementacja szybkiej mediany oparta o poprzedni projekt.
  * \details Eksportuje nastêpuj¹ce funkcje
  * - med_filt 
- * - med_filt_mask 
+ * - LV_MedFilt 
  * \author  PB
  * \date    2012/09/08
  */
@@ -129,6 +129,8 @@ unsigned short getMedianHist( const unsigned int *hist, unsigned int tabsize )
  * \param[in] mask		rozmiar maski, maska nieparzysta i kwadratowa
  * \remarks Na rogach obrazu pojawiaj¹ siê zera. Pozatym mo¿na procedurê jeszcze przyspieszyæ modyfikuj¹c pierwsz¹ medianê (mo¿e na containerze bêdzie szybsza (getMedian)
  * oraz modyfikuj¹c pobieranie wartoœci okna poprzez kopiowanie ca³ych rzedów na raz (s¹ liniowo w pamiêci).
+ * \todo Add progress feature
+ * \todo Add error_codes support
 */
 void FastMedian_Huang(	OBRAZ *image,
 						unsigned short *tabout, 
@@ -246,8 +248,9 @@ void CopyOneColumn( OBRAZ *input_image, unsigned short mask, int r, int k, unsig
  * \param[in] ncols liczba kolumn
  * \remarks Funckja dokonuje transformacji parametrów wejœciowych na format z poprzedniego projektu
  * \warning Zak³ada maskê o rozmiarze 31x31
+ * \deprecated This Function is depreciated and should not be used
 */
-extern "C" __declspec(dllexport) void med_filt(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols)
+extern "C" __declspec(dllexport) void LV_MedFilt31(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols)
 {
 	OBRAZ obraz;	// lokalna kopia obrazu wejœciowego (p³ytka)
 	unsigned short mask = 31;	// rozmiar maski
@@ -267,7 +270,7 @@ extern "C" __declspec(dllexport) void med_filt(const UINT16* input_image, UINT16
  * \param[in] mask Rozmiar maski
  * \remarks Funckja dokonuje transformacji parametrów wejœciowych na format z poprzedniego projektu
 */
-extern "C" __declspec(dllexport) void med_filt_mask(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols, UINT16 mask)
+extern "C" __declspec(dllexport) void LV_MedFilt(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols, UINT16 mask)
 {
 	OBRAZ obraz;	// lokalna kopia obrazu wejœciowego (p³ytka)
 	obraz.tab = input_image;

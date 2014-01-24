@@ -75,7 +75,7 @@ TEST_F(DLL_Tests,FastMedianTest)
 	}
 
 	// wywo³anie funkcji
-	med_filt(input_image,output_image,tmp_input_image._rows,tmp_input_image._cols);
+	LV_MedFilt31(input_image,output_image,tmp_input_image._rows,tmp_input_image._cols);
 	// nagranie wyjœcia
 	C_DumpAll dump("../../../../tests/LV_FastMedian/data/test_out.dat");
 	C_Matrix_Container out;

@@ -6,7 +6,9 @@
 
 using namespace std;
 
+/// \copydoc ::Tiff_GetParams
 typedef BYTE (*p_Tiff_GetParams)(char*, UINT16*, UINT16*); 
+/// \copydoc ::Tiff_GetImage
 typedef BYTE (*p_Tiff_GetImage)(char*, UINT16*); 
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -38,8 +40,6 @@ protected:
 			init_error = TRUE;
 			return;
 		}
-		else
-			cout << "Library loaded" << endl;
 		// funkcje
 		Tiff_GetParams = (p_Tiff_GetParams)GetProcAddress(hinstLib, "Tiff_GetParams"); 
 		if(Tiff_GetParams==NULL)
@@ -48,8 +48,6 @@ protected:
 			init_error = TRUE;
 			return;
 		}
-		else
-			cout << "Addres of Tiff_GetParams: " << Tiff_GetParams << endl;
 		Tiff_GetImage = (p_Tiff_GetImage)GetProcAddress(hinstLib, "Tiff_GetImage"); 
 		if(Tiff_GetImage==NULL)
 		{
@@ -57,8 +55,6 @@ protected:
 			init_error = TRUE;
 			return;
 		}
-		else
-			cout << "Addres of Tiff_GetImage: " << Tiff_GetImage << endl;
 	}
 
 	virtual void TearDown()
@@ -86,7 +82,7 @@ TEST_F(DLL_Tests,Tiff_GetParams)
 
 /**
  * \test Tiff_GetImage
- * Load test image to buffor
+ * Load test image to user's buffor
  */ 
 TEST_F(DLL_Tests,Tiff_GetImage)
 {
@@ -94,6 +90,7 @@ TEST_F(DLL_Tests,Tiff_GetImage)
 	BYTE err;	// error returned from procedure
 	UINT16 width, height;	// tiff size
 	err = Tiff_GetParams("../../../../tests/LV_Tiff/data/test_4800x2000.tif",&height, &width);
+	EXPECT_EQ(OK,err);	
 	UINT16* image = new UINT16[width*height];
 	err = Tiff_GetImage("../../../../tests/LV_Tiff/data/test_4800x2000.tif",image);
 	EXPECT_EQ(OK,err);		// expect OK from procedure
@@ -104,5 +101,22 @@ TEST_F(DLL_Tests,Tiff_GetImage)
 		tmpImage.data[i] = (double)image[i];
 	C_DumpAll dump("../../../../tests/LV_Tiff/data/test_out.dat");
 	dump.AddEntry(&tmpImage,"loadedTiff");
+	delete[] image;
+}
+
+/**
+ * \test Tiff_Unsupported_GetImage
+ * Load unsupported test image to user's buffor
+ */ 
+TEST_F(DLL_Tests,Tiff_Unsupported_GetImage)
+{
+	EXPECT_FALSE(init_error); // expect no error during initialization ( SetUp() )
+	BYTE err;	// error returned from procedure
+	UINT16 width, height;	// tiff size
+	err = Tiff_GetParams("../../../../tests/LV_Tiff/data/unsupported.tif",&height, &width);
+	EXPECT_EQ(OK,err);	
+	UINT16* image = new UINT16[width*height];
+	err = Tiff_GetImage("../../../../tests/LV_Tiff/data/unsupported.tif",image);
+	EXPECT_EQ(FILE_READ_ERROR,err);		// expect FILE_READ_ERROR from procedure
 	delete[] image;
 }
