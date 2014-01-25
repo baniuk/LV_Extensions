@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(SolutionDir)Debug\$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
+      <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(OutDir)$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
