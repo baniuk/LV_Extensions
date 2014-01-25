@@ -7,11 +7,12 @@
  * \pre libtiff3.dll and other dependencies must be on path
  * \author  PB
  * \date    2014/01/22
- * \warning Must be compiled with /EHa
+ * \warning Must be compiled with /EHa for Debug to run tests
  */
 
 #include "stdafx.h"
 #include "LV_Tiff.h"
+
 /** 
  * Reads size of the image and return dimmensions to LabView due to memory allocation needs.
  * \param[in] image_name	name and path to the input image
@@ -35,6 +36,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 	int TIFFReturnValue;
 	UINT32 ncols, nrows;																							// width and height of tiff image
 	tsize_t sizeOfTiff;
+	TIFF* tif;										// handler of file
 	if(NULL==_nrows || NULL==_ncols)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
@@ -42,7 +44,16 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 	}
 	// ---------- Reading tiff ----------
 	TIFFSetWarningHandler(WarnHandler);													// redirecting warnings to log
-	TIFF* tif = TIFFOpen(image_name, "r");																		// open image
+	TIFFSetErrorHandler(ErrorHandler);													// redirecting errors to log
+	try
+	{
+		tif = TIFFOpen(image_name, "r");												// open image
+	}
+	catch(TIFFException& e)
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Caught exception in TIFFOpen "),e.what());
+		return FILE_READ_ERROR;
+	}
 	PANTHEIOS_TRACE_DEBUG(PSTR("File to open: "), image_name);
 	if(NULL==tif)																								// error during opening
 	{
@@ -106,17 +117,24 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	tsize_t sizeOfTiff;
 	tstrip_t strip;
 	tdata_t buf;
-	UINT16 bitsPerSample;																		// number of bits on pixel
-	UINT16 samplesPerPixel;		// SamplesPerPixel is usually 1 for bilevel, grayscale, and palette-color images. SamplesPerPixel is usually 3 for RGB images.
-	UINT32 tileWidth;
-	int TIFFReturnValue;
+	TIFF* tif;										// handler of file
 	if(NULL==_data)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
 		return NULL_POINTER;
 	}
 	// ---------- Reading tiff ----------
-	TIFF* tif = TIFFOpen(image_name, "r");																		// open image
+	TIFFSetWarningHandler(WarnHandler);													// redirecting warnings to log
+	TIFFSetErrorHandler(ErrorHandler);													// redirecting errors to log
+	try
+	{
+		tif = TIFFOpen(image_name, "r");												// open image
+	}
+	catch(TIFFException& e)
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Caught exception in TIFFOpen "),e.what());
+		return FILE_READ_ERROR;
+	}																	// open image
 	PANTHEIOS_TRACE_DEBUG(PSTR("File to open: "), image_name);
 	if(NULL==tif)																								// error during opening
 	{
@@ -124,25 +142,8 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 		TIFFClose(tif);
 		return FILE_READ_ERROR;
 	}
-	// check supported tiff format
-	TIFFReturnValue = TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
-	if(TIFFReturnValue!=1)																						// error
-	{
-		PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
-		TIFFClose(tif);
-		return OTHER_ERROR;
-	}
-	TIFFReturnValue = TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
-	if(TIFFReturnValue!=1)																						// error
-	{
-		PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
-		TIFFClose(tif);
-		return OTHER_ERROR;
-	}
 	// test conditions: notiles, 16bit, 1sample per pixel	
-	if(	TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tileWidth)==NULL &&		// no tiles
-		16==bitsPerSample &&											// 16 bit image
-		1==samplesPerPixel)												// 1 sample per pixel
+	if(OK == checkTIFF(tif))
 	{
 		// ---------- Loading tiff (example from doc) ----------
 		// Image is loaded into internally allocated memory and then coiped to user memory
@@ -198,14 +199,14 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
  }
 
-  /** 
- * Process all errors called by LibTiff.
+ /** 
+ * Process all errors pushed by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
  * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
  * \see http://www.libtiff.org/libtiff.html#Errors
- * \exception TIFFException
+ * \throw TIFFException(\amessage), where \amessage comes from libtiff
 */
  EXPORTTESTING void ErrorHandler( const char* title, const char* format, va_list params )
  {
@@ -214,5 +215,49 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	 sprintf_s(message,MessgaeBufforSize,format,params);
 	 PANTHEIOS_TRACE_ERROR(title,message);
 	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
-	 throw TIFFException();
+	 throw TIFFException(message);								// throw exception with nessage
+ }
+
+ /**
+  * Check TIFF image for selected properties.
+  * \param[in] tiff Handler from TIFFOpen
+  * \return operation status
+  * \retval error_codes defined in error_codes.h
+  * \li OK - no error
+  * \li UNSUPPORTED_IMAGE - if image is unsuperted
+  * \li OTHER_ERROR - Undefined error
+  * \warning tif must be initialized before
+  */ 
+ EXPORTTESTING BYTE checkTIFF( TIFF* tif )
+ {
+	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	 _ASSERT(tif);	// if NULL pointer
+	 UINT16 bitsPerSample;																		// number of bits on pixel
+	 UINT16 samplesPerPixel;		// SamplesPerPixel is usually 1 for bilevel, grayscale, and palette-color images. SamplesPerPixel is usually 3 for RGB images.
+	 UINT32 tileWidth;
+	 int TIFFReturnValue;
+
+	 // check supported tiff format
+	 TIFFReturnValue = TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
+	 if(TIFFReturnValue!=1)																						// error
+	 {
+		 PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
+		 return OTHER_ERROR;
+	 }
+	 TIFFReturnValue = TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
+	 if(TIFFReturnValue!=1)																						// error
+	 {
+		 PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFGetField"));
+		 return OTHER_ERROR;
+	 }
+
+	 if( TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tileWidth)==NULL &&		// no tiles
+		 16==bitsPerSample &&											// 16 bit image
+		 1==samplesPerPixel)											// 1 sample per pixel
+	 {
+		 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+		 return OK;
+	 }
+	 else
+		 return UNSUPPORTED_IMAGE;	 
  }

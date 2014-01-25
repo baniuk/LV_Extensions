@@ -8,9 +8,13 @@
 #include "stdafx.h"
 #include "TIFFException.h"
 
-
-TIFFException::TIFFException(void)
+/**
+ * Creates exception object with message.
+ * \param[in] message Message to be writen in the object
+ */ 
+TIFFException::TIFFException(const char* message)
 {
+	this->message = message;
 }
 
 
@@ -20,5 +24,5 @@ TIFFException::~TIFFException(void)
 
 const char* TIFFException::what() const throw()
 {
-	return "Problem with TIFF image";
+	return message.c_str();
 }

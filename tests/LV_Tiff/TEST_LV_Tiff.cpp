@@ -108,30 +108,33 @@ TEST_F(DLL_Tests,WarnHandler)
  * \test ErrorHandler
  * Test of function for processing of errors. Result must be visible in log of LV_Tiff
  * \pre Requires EXPORTTESTING macro and will work only for debug configs
+ * Expects:
+ * -# ErrorHandler throws exception
  */
 TEST_F(DLL_Tests,ErrorHandler)
  {
 	 bool ex = false;	// no exception
 	 try
 	 {
-		 ErrorHandler("Error ","%s","message");
+		 ErrorHandler("Error ","%s","Test message");	// call error with message, exception should be thrown
 	 }
 	 catch(TIFFException& e)
 	 {
-		 cerr << "Caught Excpetion:" << e.what() << endl;
-		 ex = true;					// exception caught
+		 EXPECT_STREQ("Test message", e.what());	// the same message as ErrorHandler("Error ","%s","Test message");
 	 }
-	 // see log to check if it is ok
-	 EXPECT_TRUE(ex);
  }
 
 /**
  * \test Tiff_GetParams
  * Load test image and returns its size
+ * Expects:
+ * -# Proper initialization of DLL in fixture class
+ * -# Tiff_GetParams returns OK
+ * -# Image size [2000 4800]
  */ 
 TEST_F(DLL_Tests,Tiff_GetParams)
 {
-	EXPECT_FALSE(init_error); // expect no error during initialization ( SetUp() )
+	ASSERT_FALSE(init_error); // expect no error during initialization ( SetUp() )
 	BYTE err;	// error returned from procedure
 	UINT16 width, height;	// tiff size
 	err = Tiff_GetParams("../../../../tests/LV_Tiff/data/test_4800x2000.tif",&height, &width);
@@ -143,21 +146,25 @@ TEST_F(DLL_Tests,Tiff_GetParams)
 /**
  * \test Tiff_GetImage
  * Load test image to user's buffor
+ * Expects:
+ * -# Proper initialization of DLL in fixture class
+ * -# Tiff_GetParams returns OK
+ * -# Tiff_GetImage returns OK
  */ 
 TEST_F(DLL_Tests,Tiff_GetImage)
 {
-	EXPECT_FALSE(init_error); // expect no error during initialization ( SetUp() )
+	ASSERT_FALSE(init_error); // expect no error during initialization ( SetUp() )
 	BYTE err;	// error returned from procedure
 	UINT16 width, height;	// tiff size
 	err = Tiff_GetParams("../../../../tests/LV_Tiff/data/test_4800x2000.tif",&height, &width);
-	EXPECT_EQ(OK,err);	
+	ASSERT_EQ(OK,err);		// expect that returned size is correct
 	UINT16* image = new UINT16[width*height];
 	err = Tiff_GetImage("../../../../tests/LV_Tiff/data/test_4800x2000.tif",image);
 	EXPECT_EQ(OK,err);		// expect OK from procedure
 	// temporary copy to matrix
 	C_Matrix_Container tmpImage;
 	tmpImage.AllocateData(height,width);
-	for(UINT32 i=0;i<width*height;++i)
+	for(UINT32 i=0;i< (UINT32)width*height;++i)
 		tmpImage.data[i] = (double)image[i];
 	C_DumpAll dump("../../../../tests/LV_Tiff/data/test_out.dat");
 	dump.AddEntry(&tmpImage,"loadedTiff");
@@ -166,16 +173,20 @@ TEST_F(DLL_Tests,Tiff_GetImage)
 
 /**
  * \test Tiff_Unsupported_GetImage
- * Load unsupported test image to user's buffor
+ * Load unsupported test image to user's buffor.
+ * Expects:
+ * -# Proper initialization of DLL in fixture class
+ * -# Tiff_GetParams returns error
+ * -# Expects that this is FILE_READ_ERROR
  */ 
-TEST_F(DLL_Tests,DISABLED_Tiff_Unsupported_GetImage)
+TEST_F(DLL_Tests,Tiff_Unsupported_GetImage)
 {
-	EXPECT_FALSE(init_error); // expect no error during initialization ( SetUp() )
+	ASSERT_FALSE(init_error); // expect no error during initialization ( SetUp() )
 	BYTE err;	// error returned from procedure
 	UINT16 width, height;	// tiff size
 	err = Tiff_GetParams("../../../../tests/LV_Tiff/data/unsupported.tif",&height, &width);
-	EXPECT_EQ(OK,err);	
-	UINT16* image = new UINT16[width*height];
+	EXPECT_EQ(FILE_READ_ERROR,err);		// expect that returned size is correct
+	UINT16* image = new UINT16[1];	// dummy initialziation
 	err = Tiff_GetImage("../../../../tests/LV_Tiff/data/unsupported.tif",image);
 	EXPECT_EQ(FILE_READ_ERROR,err);		// expect FILE_READ_ERROR from procedure
 	delete[] image;

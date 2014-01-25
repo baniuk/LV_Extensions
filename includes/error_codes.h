@@ -11,6 +11,7 @@
 #define OK 0
 #define FILE_READ_ERROR 1
 #define NULL_POINTER 2 
+#define UNSUPPORTED_IMAGE 3
 #define OTHER_ERROR 255
 
 #endif // error_codes_h__

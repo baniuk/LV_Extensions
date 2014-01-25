@@ -16,9 +16,13 @@ class TIFFException :
 	public exception
 {
 public:
-	TIFFException(void);
+	/// Creates exception object with message
+	TIFFException(const char* message);
 	~TIFFException(void);
+	/// Shows message
 	virtual const char* what() const throw();
+private:
+	string message;
 };
 
 #endif // TIFFException_h__

@@ -62,6 +62,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>DumpAll_Debug.lib;MatrixContainers_Debug.lib;gtest.lib;gtest_main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>del c:\LV_Tiff.pantlog</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Deletes log file</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
