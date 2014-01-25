@@ -27,6 +27,9 @@
     <ClInclude Include="..\..\..\..\includes\Pantheios_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\src\LV_FastMedian\fastMedian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\LV_FastMedian\dllmain.cpp">

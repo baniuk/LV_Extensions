@@ -56,6 +56,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		}
 		else
 		{
+			/// \warning Do not erase old file. During test library is called many times.
 			pantheios_be_file_setFilePath(PSTR(PANTHEIOS_LOG_FILE_NAME), PANTHEIOS_BEID_ALL);
 			pantheios::log_INFORMATIONAL("Logger enabled!");
 		}

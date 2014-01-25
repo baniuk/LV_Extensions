@@ -19,7 +19,7 @@ struct OBRAZ
 	unsigned int tabsize;	/** iloœæ elementów tablicy = rows*cols */
 };
 
- void FastMedian_Huang(	OBRAZ *image,
+void FastMedian_Huang(	OBRAZ *image,
  						unsigned short *tabout, 
 					 	unsigned short mask);
 

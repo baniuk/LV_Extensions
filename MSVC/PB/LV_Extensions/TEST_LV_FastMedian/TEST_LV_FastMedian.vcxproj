@@ -35,7 +35,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Configs\GTest.Debug.props" />
-    <Import Project="..\..\..\..\Configs\Solution_dependecies_debug.props" />
+    <Import Project="..\..\..\..\Configs\StaticLibDependencies.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -60,6 +60,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>DumpAll_Debug.lib;MatrixContainers_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>del c:\LV_FastMedian.pantlog</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -94,4 +97,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_UpdateAssemblyVersion="" BuildVersion_UpdateFileVersion="" BuildVersion_BuildVersioningStyle="" BuildVersion_StartDate="" BuildVersion_ReplaceNonNumerics="False" BuildVersion_IncrementBeforeBuild="False" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

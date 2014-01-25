@@ -27,18 +27,22 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\Configs\LibDependencies.Debug.props" />
-    <Import Project="..\..\..\..\Configs\Pantheios.Debug.props" />
+    <Import Project="..\..\..\..\Configs\StaticLibDependencies.props" />
+    <Import Project="..\..\..\..\Configs\Pantheios.props" />
+    <Import Project="..\..\..\..\Configs\DLL_General.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Configs\StaticLibDependencies.props" />
+    <Import Project="..\..\..\..\Configs\Pantheios.props" />
+    <Import Project="..\..\..\..\Configs\DLL_General.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -49,6 +53,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,7 +72,7 @@
 $(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tools\ $(SolutionDir)..\..\..\src\LV_FastMedian\VersionNo.h</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(SolutionDir)Debug\$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
+      <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(OutDir)$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,12 +91,20 @@ $(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tool
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\tools\verbuild.exe $(SolutionDir)..\..\..\src\LV_FastMedian\VersionNo.h -c
+$(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tools\ $(SolutionDir)..\..\..\src\LV_FastMedian\VersionNo.h</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\tools\xcopy /y /v $(OutDir)$(TargetFileName) $(SolutionDir)..\..\..\bin</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\includes\Pantheios_header.h" />
+    <ClInclude Include="..\..\..\..\src\LV_FastMedian\fastMedian.h" />
     <ClInclude Include="..\..\..\..\src\LV_FastMedian\stdafx.h" />
     <ClInclude Include="..\..\..\..\src\LV_FastMedian\targetver.h" />
   </ItemGroup>
@@ -100,6 +113,7 @@ $(SolutionDir)..\..\..\src\LV_FastMedian\Version.bat $(SolutionDir)..\..\..\tool
     <ClCompile Include="..\..\..\..\src\LV_FastMedian\LV_FastMedian.cpp" />
     <ClCompile Include="..\..\..\..\src\LV_FastMedian\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
