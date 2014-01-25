@@ -17,4 +17,4 @@ rem path must end with \
 set MAJOR_VER=0
 set MINOR_VER=10
 
-%1verbuild %2 %MAJOR_VER%.%MINOR_VER%.*.+ -d2013 -xFp -s
+%1verbuild %2 %MAJOR_VER%.%MINOR_VER%.*.+ -d2014 -xFp -s
