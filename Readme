@@ -20,5 +20,34 @@ lib\modules
 +---src									Source file of programs (dll) in separate folders
 |   +---
 +---tests								Tests for programs and libs in separate folders
-|   +---
+|   \---
+		+---data						Possible input and output from test
 \---tools								Binary tools
+
+Property sheets: gtest, solution_dependencies (include, lib\modules)
+Dependenciec can be by manual adding libraries or by using options 
+
+todo - clean test
+		clean all project
+		add comments
+			clean cmatrix and cdump (move relevant method to simple static class)
+		configure External_	
+
+Nowy projekt dll:
+properties: Pantheios, Dll, libdependiences
+Prebuild Link
+Copy resource.h + *.rc + *.rc2 (zmienic nazwy w œrodku) + dodaæ do projektu
+Panth_header do projektu			
+dllmain.cpp
+
+zmiany w src, dopisac kazd¹ wersjê release, która moze zawierac ró¿ne buildy ale te same wersje wszystkich bibliotek (bo bedzie przekompilowana). minor i major s¹recznie ustaiane reszta automatycznie. nazwa instalera to data
+installer dir jest w repo ale tylko w ga³ezi release powinien byæ!
+wszystkie version.bat musz¹ miec te same -d tak jak installer
+
+release
+- zmienic ga³¹Ÿ
+- przekompilowac wszystko
+- usupe³niæ changes
+- zbudowac installator
+- checkin
+tag
