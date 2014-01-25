@@ -14,9 +14,20 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include "LV_Tiff.h"
-#include "Pantheios_header.h"
-#include "error_codes.h"
 #include "tiffio.h"
+#include "Pantheios_header.h"
+#include "TIFFException.h"
+#include "error_codes.h"
+
 
 // TODO: reference additional headers your program requires here
+
+/// size of mesage buffor passed from LibTiff 
+#define MessgaeBufforSize 1024
+
+/// Defines macro for exporting private functions from DLLs. 
+#ifdef _DEBUG
+#define EXPORTTESTING extern "C" __declspec(dllexport)
+#else
+#define EXPORTTESTING 
+#endif

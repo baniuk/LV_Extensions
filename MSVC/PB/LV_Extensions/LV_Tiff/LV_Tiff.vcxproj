@@ -58,6 +58,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LV_TIFF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -98,6 +99,7 @@ $(SolutionDir)..\..\..\src\LV_Tiff\Version.bat $(SolutionDir)..\..\..\tools\ $(S
     <ClCompile Include="..\..\..\..\src\LV_Tiff\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\TIFFException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\includes\error_codes.h" />
@@ -105,6 +107,7 @@ $(SolutionDir)..\..\..\src\LV_Tiff\Version.bat $(SolutionDir)..\..\..\tools\ $(S
     <ClInclude Include="..\..\..\..\src\LV_Tiff\LV_Tiff.h" />
     <ClInclude Include="..\..\..\..\src\LV_Tiff\stdafx.h" />
     <ClInclude Include="..\..\..\..\src\LV_Tiff\targetver.h" />
+    <ClInclude Include="..\..\..\..\src\LV_Tiff\TIFFException.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\src\LV_Tiff\LV_Tiff.rc" />

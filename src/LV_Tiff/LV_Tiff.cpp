@@ -1,31 +1,32 @@
 /**
  * \file    LV_Tiff.cpp
  * \brief	Holds Tiff related operations
- * \details Eksportuje nastêpuj¹ce funkcje
- * - Tiff_GetParams - zwraca rozmiary obrazu
- * - Tiff_GetImage - wczytuje obraz
+ * \details Exports the following functions:
+ * - Tiff_GetParams - Returns size of the image
+ * - Tiff_GetImage - Loads image into user's buffer
  * \pre libtiff3.dll and other dependencies must be on path
  * \author  PB
  * \date    2014/01/22
+ * \warning Must be compiled with /EHa
  */
 
 #include "stdafx.h"
-
+#include "LV_Tiff.h"
 /** 
  * Reads size of the image and return dimmensions to LabView due to memory allocation needs.
  * \param[in] image_name	name and path to the input image
  * \param[out] _nrows	number of rows (height)
  * \param[out] _ncols	number of cols (width)
  * \return operation status
- * \retval error_codes
+ * \retval error_codes defined in error_codes.h
  * \li OK - no error
- * \li NULL_POINTER
- * \li FILE_READ_ERROR
- * \li OTHER_ERROR
+ * \li NULL_POINTER - NULL pointer passed to function
+ * \li FILE_READ_ERROR - Problem with file reading or interpreting
+ * \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
- * \todo Supress warnings on read specified Tiffs - incorrect count for field "DateTime" (25, expecting 20); tag trimmed, see tests
+ * \see error_codes.h
  * \todo check supported tiffs in every function
 */
 extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UINT16* const _nrows, UINT16* const _ncols)
@@ -40,6 +41,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 		return NULL_POINTER;
 	}
 	// ---------- Reading tiff ----------
+	TIFFSetWarningHandler(WarnHandler);													// redirecting warnings to log
 	TIFF* tif = TIFFOpen(image_name, "r");																		// open image
 	PANTHEIOS_TRACE_DEBUG(PSTR("File to open: "), image_name);
 	if(NULL==tif)																								// error during opening
@@ -86,15 +88,15 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \param[in] image_name	name and path to the input image
  * \param[out] _data	pointer to memory block that will hold read image
  * \return operation status
- * \retval error_codes
+ * \retval error_codes defined in error_codes.h
  * \li OK - no error
- * \li NULL_POINTER
- * \li FILE_READ_ERROR - also when unsuported tiff format
- * \li OTHER_ERROR
+ * \li NULL_POINTER - NULL pointer passed to function
+ * \li FILE_READ_ERROR - Problem with file reading or interpreting
+ * \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
- * \todo Supress warnings on read specified Tiffs - incorrect count for field "DateTime" (25, expecting 20); tag trimmed, see tests
+ * \see error_codes.h
  * \warning Assumes that every srips has the same number of bytes. In this case there are 'rows' strips of size 2*cols bytes.
  * \todo Add protectiona agains wrong or unsupported tiff
 */
@@ -178,3 +180,39 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
 	return OK;
 }
+
+ /** 
+ * Process all warnings called by LibTiff.
+ * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
+ * \param[in] format is a printf(3S) format string
+ * \param[in] params any number arguments
+ * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
+ * \see http://www.libtiff.org/libtiff.html#Errors
+*/
+ EXPORTTESTING void WarnHandler(const char* title, const char* format, va_list params)
+ {
+	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	 char message[MessgaeBufforSize];				// to hold Message passed by library 
+	 sprintf_s(message,MessgaeBufforSize,format,params);
+	 PANTHEIOS_TRACE_WARNING(title,message);
+	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+ }
+
+  /** 
+ * Process all errors called by LibTiff.
+ * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
+ * \param[in] format is a printf(3S) format string
+ * \param[in] params any number arguments
+ * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
+ * \see http://www.libtiff.org/libtiff.html#Errors
+ * \exception TIFFException
+*/
+ EXPORTTESTING void ErrorHandler( const char* title, const char* format, va_list params )
+ {
+	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	 char message[MessgaeBufforSize];				// to hold Message passed by library 
+	 sprintf_s(message,MessgaeBufforSize,format,params);
+	 PANTHEIOS_TRACE_ERROR(title,message);
+	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+	 throw TIFFException();
+ }

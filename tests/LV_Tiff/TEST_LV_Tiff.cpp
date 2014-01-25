@@ -1,8 +1,16 @@
-// TEST_LV_Tiff.cpp : Defines the entry point for the console application.
-//
+/**
+ * \file    TEST_LV_Tiff.cpp
+ * \brief	Tests of public and privat efunctions in LV_Tiff.dll
+ * \pre libtiff3.dll and other dependencies must be on path
+ * \pre EXPORTTESTING macro must defined in DLL project for testing provate functions
+ * \author  PB
+ * \date    2014/01/22
+ * \related TIFFException.cpp
+ */
 
 #include "stdafx.h"
 #include "error_codes.h"
+#include "TIFFException.h"
 
 using namespace std;
 
@@ -10,6 +18,10 @@ using namespace std;
 typedef BYTE (*p_Tiff_GetParams)(char*, UINT16*, UINT16*); 
 /// \copydoc ::Tiff_GetImage
 typedef BYTE (*p_Tiff_GetImage)(char*, UINT16*); 
+/// \copydoc ::WarnHandler
+typedef void (*p_WarnHandler)(const char*, const char*, va_list);
+/// \copydoc ::ErrorHandler
+typedef void (*p_ErrorHandler)(const char*, const char*, va_list);
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -30,6 +42,8 @@ protected:
 	HINSTANCE hinstLib; 
 	p_Tiff_GetParams Tiff_GetParams;	// pointer to function from DLL
 	p_Tiff_GetImage Tiff_GetImage;	// pointer to function from DLL
+	p_WarnHandler WarnHandler; // pointer to function from DLL
+	p_ErrorHandler ErrorHandler; // pointer to function from DLL
 	virtual void SetUp()
 	{
 		init_error = FALSE;	// no error
@@ -55,6 +69,20 @@ protected:
 			init_error = TRUE;
 			return;
 		}
+		WarnHandler = (p_WarnHandler)GetProcAddress(hinstLib, "WarnHandler"); 
+		if(WarnHandler==NULL)
+		{
+			cerr << "Error in GetProcAddress" << endl;
+			init_error = TRUE;
+			return;
+		}
+		ErrorHandler = (p_ErrorHandler)GetProcAddress(hinstLib, "ErrorHandler"); 
+		if(ErrorHandler==NULL)
+		{
+			cerr << "Error in GetProcAddress" << endl;
+			init_error = TRUE;
+			return;
+		}
 	}
 
 	virtual void TearDown()
@@ -64,6 +92,38 @@ protected:
 
 	// Objects declared here can be used by all tests in the test case for Foo.
 };
+
+/**
+ * \test WarnHandler
+ * Test of function for processing of warnings. Result must be visible in log of LV_Tiff
+ * \pre Requires EXPORTTESTING macro and will work only for debug configs
+ */
+TEST_F(DLL_Tests,WarnHandler)
+ {
+	 WarnHandler("Title ","%s","message");
+	 // see log to check if it is ok
+ }
+
+/**
+ * \test ErrorHandler
+ * Test of function for processing of errors. Result must be visible in log of LV_Tiff
+ * \pre Requires EXPORTTESTING macro and will work only for debug configs
+ */
+TEST_F(DLL_Tests,ErrorHandler)
+ {
+	 bool ex = false;	// no exception
+	 try
+	 {
+		 ErrorHandler("Error ","%s","message");
+	 }
+	 catch(TIFFException& e)
+	 {
+		 cerr << "Caught Excpetion:" << e.what() << endl;
+		 ex = true;					// exception caught
+	 }
+	 // see log to check if it is ok
+	 EXPECT_TRUE(ex);
+ }
 
 /**
  * \test Tiff_GetParams
@@ -108,7 +168,7 @@ TEST_F(DLL_Tests,Tiff_GetImage)
  * \test Tiff_Unsupported_GetImage
  * Load unsupported test image to user's buffor
  */ 
-TEST_F(DLL_Tests,Tiff_Unsupported_GetImage)
+TEST_F(DLL_Tests,DISABLED_Tiff_Unsupported_GetImage)
 {
 	EXPECT_FALSE(init_error); // expect no error during initialization ( SetUp() )
 	BYTE err;	// error returned from procedure

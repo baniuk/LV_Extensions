@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\..\..\tests\LV_Tiff\TEST_LV_Tiff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\TIFFException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\tests\LV_Tiff\stdafx.h">

@@ -44,6 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(SolutionDir)..\..\..\External_dep\libtiff\lib;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)..\..\..\External_dep\libtiff\include;$(SolutionDir)..\..\..\src\LV_Tiff;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,6 +84,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\LV_Tiff\TIFFException.cpp" />
     <ClCompile Include="..\..\..\..\tests\LV_Tiff\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
