@@ -183,7 +183,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 }
 
  /** 
- * Process all warnings called by LibTiff.
+ * \details Process all warnings called by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
@@ -200,13 +200,13 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
  }
 
  /** 
- * Process all errors pushed by LibTiff.
+ * \details Process all errors pushed by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
  * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
  * \see http://www.libtiff.org/libtiff.html#Errors
- * \throw TIFFException(\amessage), where \amessage comes from libtiff
+ * \throw TIFFException(\a message), where \a message comes from libtiff
 */
  EXPORTTESTING void ErrorHandler( const char* title, const char* format, va_list params )
  {

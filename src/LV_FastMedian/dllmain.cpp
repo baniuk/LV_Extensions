@@ -1,4 +1,11 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+/**
+ * \file    dllmain.cpp
+ * \brief	Main entry to DLL
+ * \details Initializes Pantheios API
+ * \author  PB
+ * \date    2014/01/22
+ */
+ 
 #include "stdafx.h"
 
 /// Log file name and initialization of Pantheios API
@@ -56,8 +63,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		}
 		else
 		{
-			/// \warning Do not erase old file. During test library is called many times.
-			pantheios_be_file_setFilePath(PSTR(PANTHEIOS_LOG_FILE_NAME), PANTHEIOS_BEID_ALL);
+			pantheios_be_file_setFilePath(PSTR(PANTHEIOS_LOG_FILE_NAME), PANTHEIOS_BEID_ALL); ///< \warning Do not erase old file. During test library is called many times
 			pantheios::log_INFORMATIONAL("Logger enabled!");
 		}
 	case DLL_THREAD_ATTACH:

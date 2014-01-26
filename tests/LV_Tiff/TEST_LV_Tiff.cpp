@@ -108,6 +108,7 @@ TEST_F(DLL_Tests,WarnHandler)
  * \test ErrorHandler
  * Test of function for processing of errors. Result must be visible in log of LV_Tiff
  * \pre Requires EXPORTTESTING macro and will work only for debug configs
+ * 
  * Expects:
  * -# ErrorHandler throws exception
  */
