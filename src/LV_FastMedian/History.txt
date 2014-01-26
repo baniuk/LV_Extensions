@@ -1,2 +1,0 @@
-version 0.10.1019.6
-	- First public version
