@@ -206,7 +206,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
  * \param[in] params any number arguments
  * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
  * \see http://www.libtiff.org/libtiff.html#Errors
- * \throw TIFFException(\a message), where \a message comes from libtiff
+ * \throw TIFFException( \a message ), where \a message comes from libtiff
 */
  EXPORTTESTING void ErrorHandler( const char* title, const char* format, va_list params )
  {
