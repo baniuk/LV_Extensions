@@ -44,6 +44,12 @@ protected:
 	p_Tiff_GetImage Tiff_GetImage;	// pointer to function from DLL
 	p_WarnHandler WarnHandler; // pointer to function from DLL
 	p_ErrorHandler ErrorHandler; // pointer to function from DLL
+	/**
+	* Initializes test environment
+	*
+	* Load libray and get pointers to exported functions.
+	* \warning may not work when compiled as release because some methods are not exported in release
+	*/
 	virtual void SetUp()
 	{
 		init_error = FALSE;	// no error
