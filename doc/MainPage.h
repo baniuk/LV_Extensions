@@ -6,7 +6,8 @@
 * \subsection lv_tiff LV_Tiff Library
 * \copybrief LV_Tiff.cpp
 * -# ::Tiff_GetParams
-* -# ::Tiff_GetImage
+* -# ::Tiff_ReadImage
+* -# ::Tiff_WriteImage
 * \subsection lv_fastmedian LV_FastMedian Library
 * \copybrief LV_FastMedian.cpp
 * -# ::LV_MedFilt31 (depreciated)

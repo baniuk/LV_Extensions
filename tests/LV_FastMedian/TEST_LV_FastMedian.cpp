@@ -5,7 +5,7 @@
 
 using namespace std;
 
-typedef void (*p_med_filt)(UINT16*, UINT16*, UINT16, UINT16); 
+typedef void (*p_LV_MedFilt31)(UINT16*, UINT16*, UINT16, UINT16); 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -19,7 +19,7 @@ class DLL_Tests : public ::testing::Test {
 protected:
 	BOOL init_error;
 	HINSTANCE hinstLib; 
-	p_med_filt med_filt; 
+	p_LV_MedFilt31 LV_MedFilt31; 
 	virtual void SetUp()
 	{
 		init_error = FALSE;	// no error
@@ -32,14 +32,14 @@ protected:
 		else
 			cout << "Library loaded" << endl;
 		// funkcje
-		med_filt = (p_med_filt)GetProcAddress(hinstLib, "med_filt"); 
-		if(med_filt==NULL)
+		LV_MedFilt31 = (p_LV_MedFilt31)GetProcAddress(hinstLib, "LV_MedFilt31"); 
+		if(LV_MedFilt31==NULL)
 		{
 			cerr << "Error in GetProcAddress" << endl;
 			init_error = TRUE;
 		}
 		else
-			cout << "Addres of med_filt: " << med_filt << endl;
+			cout << "Addres of p_LV_MedFilt31: " << LV_MedFilt31 << endl;
 	}
 
 	virtual void TearDown()

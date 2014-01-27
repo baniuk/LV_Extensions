@@ -1,6 +1,6 @@
 /**
  * \file    TEST_LV_Tiff.cpp
- * \brief	Tests of public and privat efunctions in LV_Tiff.dll
+ * \brief	Tests of public and private functions in LV_Tiff.dll
  * \pre libtiff3.dll and other dependencies must be on path
  * \pre EXPORTTESTING macro must defined in DLL project for testing provate functions
  * \author  PB
