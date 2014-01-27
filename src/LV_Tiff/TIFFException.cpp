@@ -22,6 +22,10 @@ TIFFException::~TIFFException(void)
 {
 }
 
+/**
+ * \details Return description of exception passed to obiect in constructor.
+ * \return Pointer to string
+ */ 
 const char* TIFFException::what() const throw()
 {
 	return message.c_str();
