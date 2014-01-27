@@ -3,7 +3,7 @@
  * \brief	Holds Tiff related operations
  * \details Exports the following functions:
  * - Tiff_GetParams - Returns size of the image
- * - Tiff_GetImage - Loads image into user's buffer
+ * - Tiff_ReadImage - Loads image into user's buffer
  * \pre libtiff3.dll and other dependencies must be on path
  * \author  PB
  * \date    2014/01/22
@@ -14,7 +14,7 @@
 #include "LV_Tiff.h"
 
 /** 
- * Reads size of the image and return dimmensions to LabView due to memory allocation needs.
+ * \details Reads size of the image and return dimmensions to LabView due to memory allocation needs.
  * \param[in] image_name	name and path to the input image
  * \param[out] _nrows	number of rows (height)
  * \param[out] _ncols	number of cols (width)
@@ -90,7 +90,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 }
 
 /** 
- * Reads Tiff image under following assumpions:
+ * \details Reads Tiff image under following assumpions:
  * \li only one page
  * \li PLANAR_CONFIG tag is PLANARCONFIG_CONTIG (1) - there is only one plane
  * \li 16 bits
@@ -108,10 +108,9 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
  * \see error_codes.h
- * \warning Assumes that every srips has the same number of bytes. In this case there are 'rows' strips of size 2*cols bytes.
- * \todo Add protectiona agains wrong or unsupported tiff
+ * \warning Assumes that every strip has the same number of bytes. In this case there are 'rows' strips of size 2*cols bytes.
 */
-extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT16* const _data)
+extern "C" __declspec(dllexport) BYTE Tiff_ReadImage(const char* image_name, UINT16* const _data)
 {
 	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
 	tsize_t sizeOfTiff;
@@ -130,7 +129,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	{
 		tif = TIFFOpen(image_name, "r");												// open image
 	}
-	catch(TIFFException& e)
+	catch(TIFFException& e)	// caught also read/write exceptions
 	{
 		PANTHEIOS_TRACE_ERROR(PSTR("Caught exception in TIFFOpen "),e.what());
 		return FILE_READ_ERROR;
@@ -182,8 +181,83 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 	return OK;
 }
 
+/** 
+ * \details Writes Tiff image to file
+ * \param[in] image_name - name and path to the input image
+ * \param[in] _data	- pointer to memory block that will hold read image
+ * \param[in] _nclos - number of columns of the image (width)
+ * \param[in] _nrows - number of rows of the image (height)
+ * \return operation status
+ * \retval error_codes defined in error_codes.h
+ * \li OK - no error
+ * \li NULL_POINTER - NULL pointer passed to function
+ * \li FILE_READ_ERROR - Problem with file reading or interpreting (can appear on saving too)
+ * \li OTHER_ERROR - Undefined error
+ * \see http://www.libtiff.org/man/TIFFGetField.3t.html
+ * \see http://www.libtiff.org/libtiff.html
+ * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
+ * \see error_codes.h
+ * \warning Assumes that every strip has the same number of bytes. In this case there are 'rows' strips of size 2*cols bytes.
+*/
+extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UINT16* const _data, UINT16 _nrows, UINT16 _ncols)
+{
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	TIFF* tif;										// handler of file
+	if(NULL==_data)																				// Something wrong on LV side
+	{
+		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
+		return NULL_POINTER;
+	}
+	TIFFSetWarningHandler(WarnHandler);													// redirecting warnings to log
+	TIFFSetErrorHandler(ErrorHandler);													// redirecting errors to log
+	try
+	{
+		tif = TIFFOpen(image_name, "w");												// open image
+	}
+	catch(TIFFException& e) // caught also read/write exceptions
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Caught exception in TIFFOpen "), e.what());
+		return FILE_READ_ERROR;
+	}
+	// set fields
+	try
+	{
+		if(0==TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, _ncols)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_IMAGELENGTH, _nrows)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, _nrows)) throw TIFFException("Error TIFFSetField");
+
+		if(0==TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_FILLORDER, FILLORDER_MSB2LSB)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG)) throw TIFFException("Error TIFFSetField");
+
+		if(0==TIFFSetField(tif, TIFFTAG_XRESOLUTION, 150.0)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_YRESOLUTION, 150.0)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH)) throw TIFFException("Error TIFFSetField");
+		if(0==TIFFSetField(tif, TIFFTAG_SOFTWARE, "LV")) throw TIFFException("Error TIFFSetField");
+	}
+	catch(TIFFException& e) // caught also read/write exceptions
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Caught exception in TIFFSetField "),e.what());
+		TIFFClose(tif);
+		return OTHER_ERROR;
+	}
+	// write data to file
+	if(-1==TIFFWriteEncodedStrip(tif, 0, _data, _nrows * _ncols * 2))
+	{
+		PANTHEIOS_TRACE_ERROR(PSTR("Error in TIFFWriteEncodedStrip"));
+		TIFFClose(tif);
+		return FILE_READ_ERROR;
+	}
+	TIFFClose(tif);
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+	return OK;
+}
+
  /** 
- * Process all warnings called by LibTiff.
+ * \details Process all warnings called by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
@@ -200,13 +274,13 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
  }
 
  /** 
- * Process all errors pushed by LibTiff.
+ * \details Process all errors pushed by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
  * \param[in] title if non-zero, is printed before the message; it typically is used to identify the software module in which an error is detected.
  * \see http://www.libtiff.org/libtiff.html#Errors
- * \throw TIFFException(\amessage), where \amessage comes from libtiff
+ * \throw TIFFException( \a message ), where \a message comes from libtiff
 */
  EXPORTTESTING void ErrorHandler( const char* title, const char* format, va_list params )
  {
@@ -259,5 +333,8 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetImage(const char* image_name, UINT
 		 return OK;
 	 }
 	 else
+	 {
+		 PANTHEIOS_TRACE_ERROR(PSTR("Unsupported image"));
 		 return UNSUPPORTED_IMAGE;	 
+	 }
  }

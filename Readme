@@ -48,6 +48,8 @@ release
 - zmienic ga³¹Ÿ
 - przekompilowac wszystko
 - usupe³niæ changes
-- zbudowac installator
-- checkin
+- zalaczyc instalator w trac
+- zakonczyc release w gicie
+- zmodyfikowac linki w trac
+- dopisac w dokumnetacji
 tag

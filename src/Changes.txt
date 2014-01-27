@@ -1,10 +1,13 @@
-Changes
-	LV_FastMedian 0.10.24
+Changes ver.24
+	LV_FastMedian 0.10
 		* Small changes in code
-	LV_Tiff 0.10.24
+	LV_Tiff 0.10
 		+ Tiff reading
 		+ Protection against unsupported tiff
 		+ Exported functions returns error codes
 		* Many conceptual changes in code (Exceptions)
 		* Fixed Doxygen doc
 		* Fixed project
+Changes ver.26
+	LV_Tiff 1.0	
+		+ Tiff_WriteImage

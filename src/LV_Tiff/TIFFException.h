@@ -12,6 +12,13 @@
 
 using namespace std;
 
+/**
+ * \class TIFFException
+ *
+ * \brief Class reperesenting obiect of basic exception derrived from \a exception
+ * 
+ * Keeps copy of exception description string passed to constructor. String can be obtained by TIFFException::what() method.
+ */
 class TIFFException :
 	public exception
 {
