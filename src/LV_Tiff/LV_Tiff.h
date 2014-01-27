@@ -1,6 +1,8 @@
 /**
  * \file    LV_Tiff.h
  * \brief	Headers and definitions for LV_Tiff.dll		
+ * \details Contains only definitions of methods that are not exported in release but are exported in debug. This file can be linked to TEST in
+ * order to perform tests
  * \author  PB
  * \date    2014/01/22
  */
