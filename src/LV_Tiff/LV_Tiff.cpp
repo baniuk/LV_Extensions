@@ -37,7 +37,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 	UINT32 ncols, nrows;																							// width and height of tiff image
 	tsize_t sizeOfTiff;
 	TIFF* tif;										// handler of file
-	if(NULL==_nrows || NULL==_ncols)																				// Something wrong on LV side
+	if(NULL==_nrows || NULL==_ncols || NULL==image_name)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
 		return NULL_POINTER;
@@ -117,7 +117,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_ReadImage(const char* image_name, UIN
 	tstrip_t strip;
 	tdata_t buf;
 	TIFF* tif;										// handler of file
-	if(NULL==_data)																				// Something wrong on LV side
+	if(NULL==_data || NULL==image_name)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
 		return NULL_POINTER;
@@ -203,7 +203,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UI
 {
 	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
 	TIFF* tif;										// handler of file
-	if(NULL==_data)																				// Something wrong on LV side
+	if(NULL==_data || NULL==image_name)																				// Something wrong on LV side
 	{
 		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
 		return NULL_POINTER;
@@ -310,7 +310,11 @@ extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UI
 	 UINT16 samplesPerPixel;		// SamplesPerPixel is usually 1 for bilevel, grayscale, and palette-color images. SamplesPerPixel is usually 3 for RGB images.
 	 UINT32 tileWidth;
 	 int TIFFReturnValue;
-
+	 if (NULL==tif)
+	 {
+		 PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
+		 return NULL_POINTER;
+	 }
 	 // check supported tiff format
 	 TIFFReturnValue = TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
 	 if(TIFFReturnValue!=1)																						// error
