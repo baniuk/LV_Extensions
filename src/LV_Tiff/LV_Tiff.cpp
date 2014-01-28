@@ -14,7 +14,7 @@
 #include "LV_Tiff.h"
 
 /** 
- * \details Reads size of the image and return dimmensions to LabView due to memory allocation needs.
+ * Reads size of the image and return dimensions to LabView due to memory allocation needs.
  * \param[in] image_name	name and path to the input image
  * \param[out] _nrows	number of rows (height)
  * \param[out] _ncols	number of cols (width)
@@ -90,7 +90,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
 }
 
 /** 
- * \details Reads Tiff image under following assumpions:
+ * Reads Tiff image under following assumpions:
  * \li only one page
  * \li PLANAR_CONFIG tag is PLANARCONFIG_CONTIG (1) - there is only one plane
  * \li 16 bits
@@ -100,10 +100,10 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \param[out] _data	pointer to memory block that will hold read image
  * \return operation status
  * \retval error_codes defined in error_codes.h
- * \li OK - no error
- * \li NULL_POINTER - NULL pointer passed to function
- * \li FILE_READ_ERROR - Problem with file reading or interpreting
- * \li OTHER_ERROR - Undefined error
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
+ *  \li FILE_READ_ERROR - Problem with file reading or interpreting
+ *  \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
@@ -182,17 +182,17 @@ extern "C" __declspec(dllexport) BYTE Tiff_ReadImage(const char* image_name, UIN
 }
 
 /** 
- * \details Writes Tiff image to file
+ * Writes Tiff image to file
  * \param[in] image_name - name and path to the input image
  * \param[in] _data	- pointer to memory block that will hold read image
  * \param[in] _nclos - number of columns of the image (width)
  * \param[in] _nrows - number of rows of the image (height)
  * \return operation status
  * \retval error_codes defined in error_codes.h
- * \li OK - no error
- * \li NULL_POINTER - NULL pointer passed to function
- * \li FILE_READ_ERROR - Problem with file reading or interpreting (can appear on saving too)
- * \li OTHER_ERROR - Undefined error
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
+ *  \li FILE_READ_ERROR - Problem with file reading or interpreting (can appear on saving too)
+ *  \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
@@ -257,7 +257,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UI
 }
 
  /** 
- * \details Process all warnings called by LibTiff.
+ * Process all warnings called by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
@@ -274,7 +274,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UI
  }
 
  /** 
- * \details Process all errors pushed by LibTiff.
+ * Process all errors pushed by LibTiff.
  * This function is called by libtiff every time when an warn is generated. The message passed here will be copied to log file with formatting.
  * \param[in] format is a printf(3S) format string
  * \param[in] params any number arguments
