@@ -100,10 +100,10 @@ extern "C" __declspec(dllexport) BYTE Tiff_GetParams(const char* image_name, UIN
  * \param[out] _data	pointer to memory block that will hold read image
  * \return operation status
  * \retval error_codes defined in error_codes.h
- * \li OK - no error
- * \li NULL_POINTER - NULL pointer passed to function
- * \li FILE_READ_ERROR - Problem with file reading or interpreting
- * \li OTHER_ERROR - Undefined error
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
+ *  \li FILE_READ_ERROR - Problem with file reading or interpreting
+ *  \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
@@ -189,10 +189,10 @@ extern "C" __declspec(dllexport) BYTE Tiff_ReadImage(const char* image_name, UIN
  * \param[in] _nrows - number of rows of the image (height)
  * \return operation status
  * \retval error_codes defined in error_codes.h
- * \li OK - no error
- * \li NULL_POINTER - NULL pointer passed to function
- * \li FILE_READ_ERROR - Problem with file reading or interpreting (can appear on saving too)
- * \li OTHER_ERROR - Undefined error
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
+ *  \li FILE_READ_ERROR - Problem with file reading or interpreting (can appear on saving too)
+ *  \li OTHER_ERROR - Undefined error
  * \see http://www.libtiff.org/man/TIFFGetField.3t.html
  * \see http://www.libtiff.org/libtiff.html
  * \see http://www.awaresystems.be/imaging/tiff/astifftagviewer.html to check Tiff tags
