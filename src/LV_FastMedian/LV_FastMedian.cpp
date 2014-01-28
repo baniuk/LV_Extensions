@@ -1,9 +1,9 @@
 /**
  * \file    LV_FastMedian.cpp
- * \brief	Implementacja szybkiej mediany oparta o poprzedni projekt.
- * \details Eksportuje nastêpuj¹ce funkcje
- * - med_filt 
- * - LV_MedFilt 
+ * \brief	Implementation of Fast Median based on ISAR project
+ * \details Exports the following functions:
+ * - LV_MedFilt31 - Filtering using fixed mas 31x31 
+ * - LV_MedFilt  - Filtering using any mask
  * \author  PB
  * \date    2012/09/08
  */
@@ -241,41 +241,65 @@ void CopyOneColumn( OBRAZ *input_image, unsigned short mask, int r, int k, unsig
 }
 
 /** 
- * Filtruje obraz median¹ - funkcja exportowalna dl DLL. Zak³ada ¿e obrz jest podawany wierszami w tablicy 1D
- * \param[in] input_image		obraz wejœciowy
- * \param[out] output_image	wskaŸnik na tablice wyjœciow¹ z przefiltrowanym obrazem o rozmiarze obrazu wejœciowego
- * \param[in] nrows		liczba wierszy
- * \param[in] ncols liczba kolumn
- * \remarks Funckja dokonuje transformacji parametrów wejœciowych na format z poprzedniego projektu
- * \warning Zak³ada maskê o rozmiarze 31x31
+ * Performs median filtering of input image
+ * Assumes that input image is 1D array
+ * \param[in] input_image 1D input image
+ * \param[out] output_image	pointer to array of sie of input image with result
+ * \param[in] nrows	number of rows (height)
+ * \param[in] ncols number of cols (width)
+ * \return operation status
+ * \retval error_codes defined in error_codes.h
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
+ * \warning Assumes constant mask of size 31x31. This function should be used for test only
  * \deprecated This Function is depreciated and should not be used
 */
-extern "C" __declspec(dllexport) void LV_MedFilt31(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols)
+extern "C" __declspec(dllexport) BYTE LV_MedFilt31(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols)
 {
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	if(NULL==input_image || NULL==output_image)
+	{
+		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
+		return NULL_POINTER;
+	}
 	OBRAZ obraz;	// lokalna kopia obrazu wejœciowego (p³ytka)
 	unsigned short mask = 31;	// rozmiar maski
+	// transforamtion of data to old format
 	obraz.tab = input_image;
 	obraz.rows = nrows;
 	obraz.cols = ncols;
 	obraz.tabsize = nrows*ncols;
 	FastMedian_Huang(&obraz,output_image,mask);
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+	return OK;
 }
 
 /** 
- * Filtruje obraz median¹ - funkcja exportowalna dl DLL. Zak³ada ¿e obrz jest podawany wierszami w tablicy 1D. Dodatkowo pozwala na ustawienie maski
- * \param[in] input_image		obraz wejœciowy
- * \param[out] output_image	wskaŸnik na tablice wyjœciow¹ z przefiltrowanym obrazem o rozmiarze obrazu wejœciowego
- * \param[in] nrows		liczba wierszy
- * \param[in] ncols liczba kolumn
- * \param[in] mask Rozmiar maski
- * \remarks Funckja dokonuje transformacji parametrów wejœciowych na format z poprzedniego projektu
+ * Performs median filtering of input image
+ * Assumes that input image is 1D array. Any mas can be used
+ * \param[in] input_image 1D input image
+ * \param[out] output_image	pointer to array of sie of input image with result
+ * \param[in] nrows	number of rows (height)
+ * \param[in] ncols number of cols (width)
+ * \return operation status
+ * \retval error_codes defined in error_codes.h
+ *  \li OK - no error
+ *  \li NULL_POINTER - NULL pointer passed to function
 */
-extern "C" __declspec(dllexport) void LV_MedFilt(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols, UINT16 mask)
+extern "C" __declspec(dllexport) BYTE LV_MedFilt(const UINT16* input_image, UINT16* output_image, UINT16 nrows, UINT16 ncols, UINT16 mask)
 {
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
+	if(NULL==input_image || NULL==output_image)
+	{
+		PANTHEIOS_TRACE_CRITICAL(PSTR("NULL input pointer"));
+		return NULL_POINTER;
+	}
 	OBRAZ obraz;	// lokalna kopia obrazu wejœciowego (p³ytka)
 	obraz.tab = input_image;
 	obraz.rows = nrows;
 	obraz.cols = ncols;
 	obraz.tabsize = nrows*ncols;
 	FastMedian_Huang(&obraz,output_image,mask);
+	PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Leaving"));
+	return OK;
 }

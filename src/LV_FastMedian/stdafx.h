@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <iostream>
 #include "fastMedian.h"
+#include "error_codes.h"
 #include "Pantheios_header.h"
 
 // TODO: reference additional headers your program requires here
