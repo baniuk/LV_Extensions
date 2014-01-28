@@ -1,6 +1,8 @@
 /**
  * \file    fastMEdian.h
- * \brief	NAg³ówki do algorytmu szybkiej mediany		
+ * \brief	Headers and definitions for LV_Tiff.dll		
+ * \details Contains only definitions of methods that are not exported in release but are exported in debug. This file can be linked to TEST in
+ * order to perform tests
  * \author  PB
  * \date    2012/09/08
  */
@@ -35,7 +37,7 @@ void CopyWindow(OBRAZ *input_image,
 				unsigned int *hist);
 void CopyOneColumn( OBRAZ *input_image, unsigned short mask, int r, int k, unsigned short *out );
 
-/// iloœæ poziomów szaroœci w analizowanym obrazie
+/// Number of gray levels in the image
 #define GRAYSCALE 65536
 
 #endif // fastMedian_h__

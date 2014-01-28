@@ -1,10 +1,16 @@
-// TEST_LV_FastMedian.cpp : Defines the entry point for the console application.
-//
+/**
+ * \file    TEST_LV_FastMEdian.cpp
+ * \brief	Tests of public and private functions in LV_FastMedian.dll
+ * \pre EXPORTTESTING macro must defined in DLL project for testing private functions
+ * \author  PB
+ * \date    2014/01/22
+ */
 
 #include "stdafx.h"
 
 using namespace std;
 
+/// \copydoc ::LV_MedFilt31
 typedef void (*p_LV_MedFilt31)(UINT16*, UINT16*, UINT16, UINT16); 
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -15,11 +21,22 @@ int _tmain(int argc, _TCHAR* argv[])
 	return ret;
 }
 
+/**
+ * \brief Test fixture class
+ * \details Load and free relevant library before every test
+ */ 
 class DLL_Tests : public ::testing::Test {
 protected:
 	BOOL init_error;
-	HINSTANCE hinstLib; 
-	p_LV_MedFilt31 LV_MedFilt31; 
+	HINSTANCE hinstLib;  
+	p_LV_MedFilt31 LV_MedFilt31;  // pointer to function from DLL
+
+	/**
+	* Initializes test environment
+	*
+	* Load libray and get pointers to exported functions.
+	* \warning may not work when compiled as release because some methods are not exported in release
+	*/
 	virtual void SetUp()
 	{
 		init_error = FALSE;	// no error
@@ -28,18 +45,16 @@ protected:
 		{
 			cerr << "Error in LoadLibrary" << endl;
 			init_error = TRUE;
+			return;
 		}
-		else
-			cout << "Library loaded" << endl;
 		// funkcje
 		LV_MedFilt31 = (p_LV_MedFilt31)GetProcAddress(hinstLib, "LV_MedFilt31"); 
 		if(LV_MedFilt31==NULL)
 		{
 			cerr << "Error in GetProcAddress" << endl;
 			init_error = TRUE;
+			return;
 		}
-		else
-			cout << "Addres of p_LV_MedFilt31: " << LV_MedFilt31 << endl;
 	}
 
 	virtual void TearDown()
@@ -50,9 +65,13 @@ protected:
 	// Objects declared here can be used by all tests in the test case for Foo.
 };
 
+/**
+ * \test FastMedianTest
+ * Test of FastMEdian function. Uses fixed mask. results are returned to file. Must be verified in Matlab
+ */
 TEST_F(DLL_Tests,FastMedianTest)
 {
-	EXPECT_FALSE(init_error); // expect no error during initialization
+	ASSERT_FALSE(init_error); // expect no error during initialization
 	unsigned short *input_image;	// input image
 	unsigned short *output_image;
 	// Przygotowanie danych dla funkcji
@@ -89,5 +108,4 @@ TEST_F(DLL_Tests,FastMedianTest)
 	SAFE_DELETE(output_image);
 
 	cout << "Results in /data/test_out.dat" << endl;
-	EXPECT_EQ(1,1);
 }
