@@ -302,7 +302,7 @@ extern "C" __declspec(dllexport) BYTE Tiff_WriteImage(const char* image_name, UI
   * \li OTHER_ERROR - Undefined error
   * \warning tif must be initialized before
   */ 
- EXPORTTESTING BYTE checkTIFF( TIFF* tif )
+  EXPORTTESTING BYTE checkTIFF( TIFF* tif )
  {
 	 PANTHEIOS_TRACE_INFORMATIONAL(PSTR("Entering"));
 	 _ASSERT(tif);	// if NULL pointer
